@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIADA SIMULATOR</title>
+    <style>
+        /* === ТЁМНО-СЕРЫЙ ФОН === */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            background: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        /* === ВНУТРЕННИЙ КОНТЕЙНЕР === */
+        .main-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1400px;
+            gap: 40px;
+            flex: 1;
+        }
+
+        /* === ЛЕВАЯ ЧАСТЬ === */
+        .left-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            flex-shrink: 0;
+            max-width: 450px;
+        }
+
+        .left-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        /* === КАРТИНКА === */
+        .logo {
+            opacity: 0;
+            transform: translateX(-300px);
+            animation: slideInLogo 1.2s ease-out forwards;
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            max-height: 180px;
+            width: auto;
+            display: block;
+        }
+
+        /* === ТЕКСТ НАЗВАНИЯ === */
+        .text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transform: translateX(-100px);
+            animation: slideInText 1s ease-out forwards;
+            animation-delay: 1.2s;
+            padding-top: 5px;
+        }
+
+        .text-block .line {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            letter-spacing: 3px;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .text-block .line .highlight {
+            color: #ff0000;
+        }
+
+        /* === СКРИНШОТЫ === */
+        .screenshots {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 10px;
+            opacity: 0;
+            animation: slideInLogo 1.2s ease-out forwards;
+            animation-delay: 1.4s;
+        }
+
+        .screenshots img {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            display: block;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .screenshots img:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+        }
+
+        /* === ЦЕНТРАЛЬНАЯ ЧАСТЬ === */
+        .center-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 40px;
+            height: 75vh;
+            gap: 20px;
+            opacity: 0;
+            animation: slideInLogo 1.2s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+
+        .download-title {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.6rem;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .download-btn .btn-icon {
+            width: 140px;
+            height: 140px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn .btn-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .download-btn:hover .btn-icon {
+            border-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+        }
+
+        .download-btn .btn-label {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.2rem;
+            color: #dddddd;
+            letter-spacing: 1px;
+        }
+
+        .download-btn .btn-status {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.8rem;
+            color: #ffd93d;
+            letter-spacing: 1px;
+        }
+
+        /* === ANDROID (некликабельно) === */
+        .download-btn.android {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .download-btn.android:hover {
+            transform: none;
+        }
+
+        .download-btn.android:hover .btn-icon {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: none;
+        }
+
+        /* === ПРАВАЯ ЧАСТЬ === */
+        .right-content {
+            flex: 0 0 200px;
+            max-width: 200px;
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 10px;
+            gap: 12px;
+            opacity: 0;
+            animation: slideInLogo 1.2s ease-out forwards;
+            animation-delay: 0.6s;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .right-content::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .right-content .text-btn {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.1rem;
+            color: #dddddd;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 6px 0;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .right-content .text-btn:hover {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateX(4px);
+        }
+
+        /* === СОЦ СЕТИ === */
+        .social-toggle {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.1rem;
+            color: #dddddd;
+            letter-spacing: 1px;
+            cursor: pointer;
+            padding: 6px 0;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            width: fit-content;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .social-toggle:hover {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+            transform: translateX(4px);
+        }
+
+        .social-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-left: 8px;
+        }
+
+        .social-dropdown.open {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 6px;
+        }
+
+        .social-dropdown a {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .social-dropdown a:hover {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(4px);
+        }
+
+        .social-dropdown .support-link {
+            color: #ffd93d;
+            margin-top: 4px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-dropdown .support-link:hover {
+            color: #ffe066;
+        }
+
+        /* === ФУТЕР === */
+        .footer {
+            width: 100%;
+            max-width: 1400px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            animation-delay: 2s;
+        }
+
+        .footer .disclaimer {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.85rem;
+            color: #888888;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .footer .copyright {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.8rem;
+            color: #666666;
+            letter-spacing: 1px;
+        }
+
+        /* === АНИМАЦИИ === */
+        @keyframes slideInLogo {
+            0% { opacity: 0; transform: translateX(-300px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInText {
+            0% { opacity: 0; transform: translateX(-100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === АДАПТАЦИЯ === */
+        @media (max-width: 1200px) {
+            .center-content { height: auto; padding: 20px 0; justify-content: center; }
+            .download-btn .btn-icon { width: 110px; height: 110px; }
+            .right-content { flex: 0 0 160px; max-width: 160px; padding-left: 20px; }
+            .right-content .text-btn, .social-toggle { font-size: 1rem; }
+            .left-content { max-width: 350px; }
+            .text-block .line { font-size: 2.2rem; }
+            .screenshots img { max-width: 350px; }
+        }
+
+        @media (max-width: 1024px) {
+            .right-content { flex: 0 0 140px; max-width: 140px; }
+            .download-btn .btn-icon { width: 90px; height: 90px; }
+            .download-buttons { gap: 30px; }
+            .left-content { max-width: 300px; }
+            .text-block .line { font-size: 1.8rem; }
+            .logo img { max-height: 140px; }
+            .screenshots img { max-width: 300px; }
+        }
+
+        @media (max-width: 850px) {
+            body { padding: 20px; }
+            .main-content { flex-direction: column; align-items: flex-start; gap: 30px; }
+            .left-content { max-width: 100%; width: 100%; }
+            .left-header { flex-wrap: wrap; gap: 15px; }
+            .screenshots img { max-width: 100%; }
+            .right-content {
+                flex: 1 1 auto; max-width: 100%; width: 100%; height: auto; min-height: auto;
+                flex-direction: row; flex-wrap: wrap; justify-content: flex-start;
+                padding: 0 0 10px 0; gap: 15px 25px; padding-left: 0;
+            }
+            .right-content::before { display: none; }
+            .right-content .text-btn, .social-toggle {
+                font-size: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 0;
+            }
+            .social-dropdown { width: 100%; flex-direction: row; flex-wrap: wrap; gap: 10px 20px; padding-left: 0; }
+            .social-dropdown a { font-size: 0.85rem; }
+            .social-dropdown .support-link { border-top: none; margin-top: 0; padding-top: 4px; }
+            .center-content { width: 100%; height: auto; min-height: 200px; padding: 10px 0; justify-content: center; }
+            .text-block .line { font-size: 2rem; }
+            .logo img { max-height: 120px; }
+            .download-btn .btn-icon { width: 80px; height: 80px; }
+            .download-title { font-size: 1.2rem; }
+            .footer { margin-top: 20px; padding-top: 20px; }
+        }
+
+        @media (max-width: 500px) {
+            .text-block .line { font-size: 1.5rem; }
+            .logo img { max-height: 80px; }
+            .download-btn .btn-icon { width: 70px; height: 70px; border-radius: 12px; }
+            .download-btn .btn-icon img { padding: 8px; }
+            .download-buttons { gap: 20px; }
+            .download-title { font-size: 1rem; }
+            .download-btn .btn-label { font-size: 1rem; }
+            .right-content .text-btn, .social-toggle { font-size: 0.9rem; }
+            .social-dropdown a { font-size: 0.8rem; }
+            .footer .disclaimer { font-size: 0.7rem; }
+            .footer .copyright { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== ОСНОВНОЕ СОДЕРЖИМОЕ ====== -->
+    <div class="main-content">
+
+        <!-- ====== ЛЕВАЯ ЧАСТЬ ====== -->
+        <div class="left-content">
+            <div class="left-header">
+                <div class="logo">
+                    <img src="logo_web.jpg" alt="Логотип">
+                </div>
+                <div class="text-block">
+                    <span class="line">TRIADA</span>
+                    <span class="line"><span class="highlight">SIMULATOR</span></span>
+                </div>
+            </div>
+
+            <!-- СКРИНШОТЫ ИЗ ИГРЫ -->
+            <div class="screenshots">
+                <img src="1.jpg" alt="Скриншот 1">
+                <img src="2.jpg" alt="Скриншот 2">
+                <img src="3.jpg" alt="Скриншот 3">
+            </div>
+        </div>
+
+        <!-- ====== ЦЕНТРАЛЬНАЯ ЧАСТЬ ====== -->
+        <div class="center-content">
+            <div class="download-title">Доступно для скачивания</div>
+            <div class="download-buttons">
+                <!-- ОБНОВЛЁННАЯ ССЫЛКА НА БИЛД -->
+                <a href="https://github.com/qmenrust-sketch/storyOne_assult/releases/download/triada_sim/triadasimulator.exe" target="_blank" class="download-btn windows">
+                    <div class="btn-icon">
+                        <img src="windows.jpg" alt="Windows">
+                    </div>
+                    <span class="btn-label">Windows</span>
+                </a>
+                <div class="download-btn android">
+                    <div class="btn-icon">
+                        <img src="android.png" alt="Android">
+                    </div>
+                    <span class="btn-label">Android</span>
+                    <span class="btn-status">⏳ в разработке</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== ПРАВАЯ ЧАСТЬ ====== -->
+        <div class="right-content">
+            <a href="file_archive.html" class="text-btn">Архив версий</a>
+            <span class="text-btn" style="cursor: default; pointer-events: none; color: #555555;">Wiki</span>
+
+            <div>
+                <div class="social-toggle" id="socialToggle">Соц сети ▼</div>
+                <div class="social-dropdown" id="socialDropdown">
+                    <a href="https://www.youtube.com/@Q_game1HOA" target="_blank">YouTube</a>
+                    <a href="https://www.tiktok.com/@story1assault" target="_blank">TikTok</a>
+                    <a href="https://t.me/Q1game_1" target="_blank">Telegram</a>
+                    <a href="https://www.donationalerts.com/r/Qmen_official" target="_blank" class="support-link">ПОДДЕРЖИТЕ НАС</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ====== ФУТЕР ====== -->
+    <div class="footer">
+        <div class="disclaimer">
+            Все события, персонажи и так далее являются вымышленными, любые совпадения случайны.<br>
+            Мы ничего не пропагандируем и не навязываем. Все показанное — художественный вымысел.
+        </div>
+        <div class="copyright">© 2026 Q-Game Studio</div>
+    </div>
+
+    <script>
+        // === РАСКРЫТИЕ СПИСКА СОЦ СЕТЕЙ ===
+        const toggle = document.getElementById('socialToggle');
+        const dropdown = document.getElementById('socialDropdown');
+
+        toggle.addEventListener('click', function() {
+            const isOpen = dropdown.classList.toggle('open');
+            toggle.textContent = isOpen ? 'Соц сети ▲' : 'Соц сети ▼';
+        });
+    </script>
+
+</body>
+</html>

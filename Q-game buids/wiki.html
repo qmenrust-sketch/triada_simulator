@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki — История одного штурма</title>
+    <style>
+        /* === ОБЩИЙ СТИЛЬ === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: #0a0a0a;
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            color: #dddddd;
+            overflow: hidden;
+        }
+
+        /* === КОНТЕЙНЕР С КОЛОНКАМИ === */
+        .wiki-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            padding: 40px;
+            gap: 40px;
+            background: #0a0a0a;
+        }
+
+        /* === ЛЕВАЯ КОЛОНКА (САЙДБАР) === */
+        .wiki-sidebar {
+            flex: 0 0 280px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 20px;
+            border-right: 2px solid rgba(255, 255, 255, 0.15);
+            padding-right: 30px;
+            overflow-y: auto;
+        }
+
+        .wiki-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .wiki-sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+        .wiki-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .wiki-sidebar .nav-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 3px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 8px;
+        }
+        .wiki-sidebar .nav-title .highlight {
+            color: #ff0000;
+        }
+
+        /* === КНОПКИ В САЙДБАРЕ === */
+        .wiki-sidebar .nav-btn {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.0rem;
+            color: #bbbbbb;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .wiki-sidebar .nav-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+            border-left-color: #ff0000;
+            transform: translateX(4px);
+        }
+        .wiki-sidebar .nav-btn.active {
+            color: #ffffff;
+            background: rgba(255, 0, 0, 0.08);
+            border-left-color: #ff0000;
+        }
+
+        /* === КНОПКА НАЗАД === */
+        .wiki-sidebar .back-btn {
+            margin-top: auto;
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.95rem;
+            color: #666666;
+            text-decoration: none;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 20px;
+        }
+        .wiki-sidebar .back-btn:hover {
+            color: #ffffff;
+        }
+
+        /* === ПРАВАЯ КОЛОНКА (КОНТЕНТ) === */
+        .wiki-content {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px 10px 20px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .wiki-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .wiki-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+        }
+        .wiki-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .wiki-content .content-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .wiki-content .content-title .highlight {
+            color: #ff0000;
+        }
+
+        .wiki-content .content-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #cccccc;
+            letter-spacing: 0.3px;
+            white-space: pre-wrap;
+        }
+        .wiki-content .content-text strong {
+            color: #ffffff;
+        }
+        .wiki-content .content-text .highlight {
+            color: #ff0000;
+        }
+        .wiki-content .content-text .section-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 4px;
+        }
+
+        /* === АДАПТАЦИЯ === */
+        @media (max-width: 850px) {
+            .wiki-container {
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .wiki-sidebar {
+                flex: 0 0 auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+                padding-right: 0;
+                padding-bottom: 16px;
+                gap: 6px 12px;
+                max-height: 180px;
+                overflow-y: auto;
+            }
+            .wiki-sidebar .nav-title {
+                width: 100%;
+                font-size: 1.4rem;
+                border-bottom: none;
+                margin-bottom: 4px;
+            }
+            .wiki-sidebar .nav-btn {
+                font-size: 0.9rem;
+                padding: 4px 12px;
+                border-left: none;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+            }
+            .wiki-sidebar .nav-btn:hover {
+                transform: none;
+                border-left-color: transparent;
+                border-bottom-color: #ff0000;
+            }
+            .wiki-sidebar .nav-btn.active {
+                border-left-color: transparent;
+                border-bottom-color: #ff0000;
+            }
+            .wiki-sidebar .back-btn {
+                margin-top: 0;
+                border-top: none;
+                padding-top: 0;
+                padding: 4px 12px;
+                font-size: 0.85rem;
+            }
+            .wiki-content {
+                padding: 10px 0 10px 0;
+                height: 100%;
+                overflow-y: auto;
+            }
+            .wiki-content .content-title {
+                font-size: 1.6rem;
+            }
+            .wiki-content .content-text {
+                font-size: 0.9rem;
+            }
+            .wiki-content .content-text .section-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .wiki-container {
+                padding: 16px;
+            }
+            .wiki-sidebar .nav-title {
+                font-size: 1.2rem;
+            }
+            .wiki-sidebar .nav-btn {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            .wiki-content .content-title {
+                font-size: 1.3rem;
+            }
+            .wiki-content .content-text {
+                font-size: 0.8rem;
+            }
+            .wiki-content .content-text .section-title {
+                font-size: 1.0rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wiki-container">
+
+        <!-- ====== ЛЕВАЯ КОЛОНКА (САЙДБАР) ====== -->
+        <div class="wiki-sidebar">
+            <div class="nav-title">Вики<span class="highlight">.</span></div>
+
+            <!-- ОСНОВНЫЕ РАЗДЕЛЫ -->
+            <a href="#" class="nav-btn" data-section="cherep">ЧВК Череп</a>
+            <a href="#" class="nav-btn" data-section="cherep_2024">ЧВК 2024</a>
+            <a href="#" class="nav-btn" data-section="krasnorus">Армия Красноруси</a>
+            <a href="#" class="nav-btn" data-section="krasnorus_2024">2024 год</a>
+
+            <!-- КНОПКА НАЗАД -->
+            <a href="index.html" class="back-btn">← На главную</a>
+        </div>
+
+        <!-- ====== ПРАВАЯ КОЛОНКА (КОНТЕНТ) ====== -->
+        <div class="wiki-content" id="wikiContent">
+            <div class="content-title">Добро пожаловать в <span class="highlight">Вики</span></div>
+            <div class="content-text" id="wikiText">
+                Выберите раздел слева, чтобы узнать больше о мире <strong>Истории одного <span class="highlight">штурма</span></strong>.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================
+        //  ДАННЫЕ ДЛЯ РАЗДЕЛОВ
+        // =========================================
+        const wikiData = {
+            cherep: {
+                title: 'ЧВК "Череп"',
+                text: `Частная военная компания, основанная 17 мая 2023 года как небольшой отряд спецназа под руководством ФСБ России. Структура была создана для защиты южных регионов страны от атак боевиков, которые нападали с территорий стран Кавказа.
+
+        После данной операции часть оперативников были завербованы Кьюменией для ликвидации главарей оппозиции. Как раз именно с этого момента появилось название ЧВК "Череп".
+
+        В конце мая 2024 года на востоке Красноруси, при поддержке властей РФ, вспыхнуло восстание пророссийских сил. 7 июня 2024 года подразделения ЧВК "Череп" пересекли границу Красноруси со стороны Кьюмении и Беларуси.`
+            },
+            cherep_2024: {
+                title: 'ЧВК "Череп" — 2024',
+                text: `ПРЕДЫСТОРИЯ:
+
+        Уже спустя год после своего создания и возвращения в Россию, ЧВК ЧЕРЕП не была встречена судом и наручниками, нет. За помощь дружескому режиму, Россия начала тесно сотрудничать с организацией, а та в свою очередь была не против проявлять лояльность.
+
+        Таким образом МО РФ оснащала ЧВК оружием, боеприпасами и, самое главное, территорией, где наемники могли размещать свой личный состав. Несмотря на затягивающуюся войну России с Наварией, ЧВК могла спокойно вербовать ветеранов в свои ряды.
+
+        ---
+        ВНЕШНИЙ ВИД:
+
+        В мае 2024 года глава ЧВК ЧЕРЕП с позывным "Наполеон" утвердил указ, в котором абсолютно все наемники должны быть одеты в единую экипировку.
+
+        Комплект экипировки включал в себя: автомат Калашникова АК-74, тактический костюм в цвете хаки, черный тактический шлем, черный плитник, черный рюкзак и различная мелочевка.
+
+        ---
+        ВООРУЖЕНИЕ:
+
+        В 2024 году у ЧВК ЧЕРЕП ещё не было установленных стандартов распределения оружия среди бойцов, однако известно, что у каждого наемника по умолчанию был автомат АК-74. Также были и "дополнительные средства вооружения". Так, в руках наемников были:
+
+        • СВД (СССР)
+        • ПКМ (РФ)
+        • M-61 (Кьюмения)
+        • ПП "Томпсон" (Кьюмения)
+
+        ---
+        ВОЕННАЯ ТЕХНИКА:
+
+        В 2024 году автопарк ЧВК ЧЕРЕП ещё не был таким большим, но уже показывал всю серьезность организации.
+
+        БТР "Бумеранг" — российский бронетранспортер, переданный небольшой партией (20 единиц) в руки ЧВК. Этого хватило, чтобы обеспечить 17 и 18 роты техникой доставки десанта и их поддержки.
+
+        Т-90А — российский современный основной боевой танк. Был передан в руки ЧВК тогда же, когда и "Бумеранги". Поступило их всего 10 единиц и были приписаны к 17 роте.
+
+        Т-80 — советский танк, переданный Кьюменией в знак благодарности за помощь в сохранении правящей власти. Танков поступило в количестве 10 единиц, войдя в автопарк 18 роты.
+
+        БТР-80 — советский бронетранспортер, также переданный Кьюменией. Является самой крупной подачкой за всю историю ЧВК ЧЕРЕП, ведь общее количество переданных машин составило более 30 единиц.
+
+        ---
+        УСТРОЙСТВО:
+
+        В 2024 году ЧВК ЧЕРЕП использовала собственную систему рот, в которой предполагалось создавать подразделения, которые могли бы действовать независимо от других родов войск.
+
+        Таким образом, рота ЧВК ЧЕРЕП состояла из:
+        100 пехотинцев
+        10 танков
+        10 БМП/БТР
+        5 минометов
+        5 артиллерийских гаубиц
+        10 операторов БПЛА`
+            },
+            krasnorus: {
+                title: 'Армия Красноруси',
+                text: `Армия Красноруси или, как официально, Вооруженные силы Красноруси — это официальное воинское образование государства Краснорусь, которое было сформировано в 1991 году после развала СССР.
+
+        До 2014 года Краснорусь была нейтральна к России, однако после из-за агрессии России на Наварию страна встала на путь сближения с Европой.
+
+        С 2020 по 2024 год в страну в рамках сотрудничества с НАТО доставлялось вооружение, техника и инструктора альянса.`
+            },
+            krasnorus_2024: {
+                title: '2024 год',
+                text: `ПРЕДЫСТОРИЯ:
+
+        С января по май 2024 года страна жила обычной жизнью, вот только поставки НАТО становились всё больше и больше.
+
+        05.05.2024 в восточных регионах страны начались небольшие митинги, а также акты хулиганства. Большая часть сепаратистов сконцентрировалась в районах Крордской и Хандской областей. В Крорде протестующим удалось быстро взять город под свой контроль и завладеть оружием после штурма полицейских участков.
+
+        Но вот в Хандской области дела обстояли иначе. Из-за того что под городом находились воинские части мотострелков и артиллеристов, военным удалось не допустить захвата города.
+
+        07.05.2024 во время разгона демонстрантов было совершено вооруженное нападение на солдат ВСК, те в свою очередь открыли ответный огонь и как результат: 6 убитых сепаратистов, 3 случайно убитых мирных жителя и 4 раненных солдат. Данное событие вызвало бурное обсуждение в мире и осуждение со стороны России.
+
+        С 8 мая по 1 июня силы сепаратистов не оставляли попыток взятия Ханда. На окраинах города сутками были слышны выстрелы и взрывы, там была настоящая мясорубка. За каждый кусочек территории шли жестокие бои.
+
+        ---
+        ЭКИПИРОВКА:
+        Экипировка солдат ВСК состояла из зелёного камуфляжа с жёлтыми пикселями, автомата M-16. В качестве защиты использовались общевойсковые польские шлема и бронежилеты.
+
+        ---
+        ВООРУЖЕНИЕ:
+        Как было сказано ранее, на вооружении ВСК стояли автоматы M-16, но также были и другие виды вооружения. Так, в руках ВСК были:
+        • АКМ (СССР)
+        • HK-416 (Германия)
+        • ПКМ (СССР/Россия)
+        • M249 (США)
+
+        ---
+        ВОЕННАЯ ТЕХНИКА:
+        Сказать точные модели сложно, но учитывая историю и политику государства, можно с точностью сказать, что автопарк армии был разнообразным и состоял из советских и западных видов техники. Однако если покопаться, то можно узнать некоторые машины.
+
+        Т-80 — советский основной боевой танк. В игре встречается в сгоревшем виде на карте "Поля Красноруси", рядом виднеется FPV-дрон, что даёт нам понять, от чего погибла машина.`
+            }
+        };
+
+        // =========================================
+        //  УПРАВЛЕНИЕ АКТИВНЫМИ КНОПКАМИ И КОНТЕНТОМ
+        // =========================================
+        const navBtns = document.querySelectorAll('.nav-btn[data-section]');
+        const contentTitle = document.querySelector('.content-title');
+        const contentText = document.getElementById('wikiText');
+
+        function loadSection(sectionKey) {
+            if (!sectionKey || !wikiData[sectionKey]) return;
+
+            const data = wikiData[sectionKey];
+            contentTitle.innerHTML = `<span class="highlight">${data.title}</span>`;
+            contentText.innerHTML = data.text;
+
+            navBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionKey) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.dataset.section;
+                loadSection(section);
+            });
+        });
+
+        // === ЗАГРУЖАЕМ РАЗДЕЛ "ЧВК Череп" ПО УМОЛЧАНИЮ ===
+        loadSection('cherep');
+    </script>
+
+</body>
+</html>
