@@ -15,7 +15,6 @@
             overflow-x: hidden;
         }
 
-        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
         body {
             display: flex;
             flex-direction: column;
@@ -24,7 +23,6 @@
             box-sizing: border-box;
         }
 
-        /* === ВНУТРЕННИЙ КОНТЕЙНЕР === */
         .main-content {
             display: flex;
             align-items: flex-start;
@@ -51,7 +49,6 @@
             gap: 30px;
         }
 
-        /* === КАРТИНКА === */
         .logo {
             opacity: 0;
             transform: translateX(-300px);
@@ -65,7 +62,6 @@
             display: block;
         }
 
-        /* === ТЕКСТ НАЗВАНИЯ === */
         .text-block {
             display: flex;
             flex-direction: column;
@@ -205,7 +201,6 @@
             letter-spacing: 1px;
         }
 
-        /* === ANDROID (некликабельно) === */
         .download-btn.android {
             cursor: default;
             pointer-events: none;
@@ -268,7 +263,6 @@
             transform: translateX(4px);
         }
 
-        /* === СОЦ СЕТИ === */
         .social-toggle {
             font-family: 'Courier New', 'Lucida Console', monospace;
             font-size: 1.1rem;
@@ -365,7 +359,6 @@
             letter-spacing: 1px;
         }
 
-        /* === АНИМАЦИИ === */
         @keyframes slideInLogo {
             0% { opacity: 0; transform: translateX(-300px); }
             100% { opacity: 1; transform: translateX(0); }
@@ -381,7 +374,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* === АДАПТАЦИЯ === */
         @media (max-width: 1200px) {
             .center-content { height: auto; padding: 20px 0; justify-content: center; }
             .download-btn .btn-icon { width: 110px; height: 110px; }
@@ -445,10 +437,9 @@
 </head>
 <body>
 
-    <!-- ====== ОСНОВНОЕ СОДЕРЖИМОЕ ====== -->
     <div class="main-content">
 
-        <!-- ====== ЛЕВАЯ ЧАСТЬ ====== -->
+        <!-- ЛЕВАЯ ЧАСТЬ -->
         <div class="left-content">
             <div class="left-header">
                 <div class="logo">
@@ -460,7 +451,6 @@
                 </div>
             </div>
 
-            <!-- СКРИНШОТЫ ИЗ ИГРЫ -->
             <div class="screenshots">
                 <img src="1.jpg" alt="Скриншот 1">
                 <img src="2.jpg" alt="Скриншот 2">
@@ -468,16 +458,16 @@
             </div>
         </div>
 
-        <!-- ====== ЦЕНТРАЛЬНАЯ ЧАСТЬ ====== -->
+        <!-- ЦЕНТР -->
         <div class="center-content">
             <div class="download-title">Доступно для скачивания</div>
             <div class="download-buttons">
-                <!-- ОБНОВЛЁННАЯ ССЫЛКА НА БИЛД -->
-                <a href="https://github.com/qmenrust-sketch/storyOne_assult/releases/download/triada_sim/triadasimulator.exe" target="_blank" class="download-btn windows">
+                <a href="#" id="windowsDownload" class="download-btn windows">
                     <div class="btn-icon">
                         <img src="windows.jpg" alt="Windows">
                     </div>
                     <span class="btn-label">Windows</span>
+                    <span class="btn-status" id="latestVersion"></span>
                 </a>
                 <div class="download-btn android">
                     <div class="btn-icon">
@@ -489,7 +479,7 @@
             </div>
         </div>
 
-        <!-- ====== ПРАВАЯ ЧАСТЬ ====== -->
+        <!-- ПРАВАЯ ЧАСТЬ -->
         <div class="right-content">
             <a href="file_archive.html" class="text-btn">Архив версий</a>
             <span class="text-btn" style="cursor: default; pointer-events: none; color: #555555;">Wiki</span>
@@ -507,7 +497,7 @@
 
     </div>
 
-    <!-- ====== ФУТЕР ====== -->
+    <!-- ФУТЕР -->
     <div class="footer">
         <div class="disclaimer">
             Все события, персонажи и так далее являются вымышленными, любые совпадения случайны.<br>
@@ -517,7 +507,7 @@
     </div>
 
     <script>
-        // === РАСКРЫТИЕ СПИСКА СОЦ СЕТЕЙ ===
+        // === РАСКРЫТИЕ СОЦ СЕТЕЙ ===
         const toggle = document.getElementById('socialToggle');
         const dropdown = document.getElementById('socialDropdown');
 
@@ -525,6 +515,32 @@
             const isOpen = dropdown.classList.toggle('open');
             toggle.textContent = isOpen ? 'Соц сети ▲' : 'Соц сети ▼';
         });
+
+        // === АВТОЗАГРУЗКА ПОСЛЕДНЕГО РЕЛИЗА ===
+        const REPO = 'qmenrust-sketch/triada_simulator';
+
+        async function loadLatestRelease() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO}/releases`);
+                const releases = await response.json();
+                if (!releases.length) return;
+
+                const latest = releases[0];
+                const asset = latest.assets.find(a =>
+                    a.name.endsWith('.exe') || a.name.endsWith('.zip')
+                );
+
+                const btn = document.getElementById('windowsDownload');
+                const versionLabel = document.getElementById('latestVersion');
+
+                if (asset) btn.href = asset.browser_download_url;
+                if (versionLabel) versionLabel.textContent = latest.tag_name;
+            } catch (e) {
+                console.error('Не удалось загрузить релизы:', e);
+            }
+        }
+
+        loadLatestRelease();
     </script>
 
 </body>
