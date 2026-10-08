@@ -33,7 +33,6 @@
             flex: 1;
         }
 
-        /* === ЛЕВАЯ ЧАСТЬ === */
         .left-content {
             display: flex;
             flex-direction: column;
@@ -194,10 +193,11 @@
             letter-spacing: 1px;
         }
 
+        /* === СТАТУС — БЕЛЫЙ === */
         .download-btn .btn-status {
             font-family: 'Courier New', 'Lucida Console', monospace;
             font-size: 0.8rem;
-            color: #ffd93d;
+            color: #ffffff;
             letter-spacing: 1px;
         }
 
@@ -439,7 +439,6 @@
 
     <div class="main-content">
 
-        <!-- ЛЕВАЯ ЧАСТЬ -->
         <div class="left-content">
             <div class="left-header">
                 <div class="logo">
@@ -458,7 +457,6 @@
             </div>
         </div>
 
-        <!-- ЦЕНТР -->
         <div class="center-content">
             <div class="download-title">Доступно для скачивания</div>
             <div class="download-buttons">
@@ -474,12 +472,11 @@
                         <img src="android.png" alt="Android">
                     </div>
                     <span class="btn-label">Android</span>
-                    <span class="btn-status">⏳ в разработке</span>
+                    <span class="btn-status">в разработке...</span>
                 </div>
             </div>
         </div>
 
-        <!-- ПРАВАЯ ЧАСТЬ -->
         <div class="right-content">
             <a href="file_archive.html" class="text-btn">Архив версий</a>
             <span class="text-btn" style="cursor: default; pointer-events: none; color: #555555;">Wiki</span>
@@ -497,7 +494,6 @@
 
     </div>
 
-    <!-- ФУТЕР -->
     <div class="footer">
         <div class="disclaimer">
             Все события, персонажи и так далее являются вымышленными, любые совпадения случайны.<br>
@@ -507,7 +503,6 @@
     </div>
 
     <script>
-        // === РАСКРЫТИЕ СОЦ СЕТЕЙ ===
         const toggle = document.getElementById('socialToggle');
         const dropdown = document.getElementById('socialDropdown');
 
@@ -516,7 +511,6 @@
             toggle.textContent = isOpen ? 'Соц сети ▲' : 'Соц сети ▼';
         });
 
-        // === АВТОЗАГРУЗКА ПОСЛЕДНЕГО РЕЛИЗА ===
         const REPO = 'qmenrust-sketch/triada_simulator';
 
         async function loadLatestRelease() {
