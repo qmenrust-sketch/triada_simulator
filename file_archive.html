@@ -82,16 +82,18 @@
             letter-spacing: 0.5px;
         }
 
-        .version-tag.new {
-            color: #ffd93d;
-            border-color: rgba(255, 217, 61, 0.3);
-            background: rgba(255, 217, 61, 0.08);
+        /* === АКТУАЛЬНАЯ — ЗЕЛЁНАЯ === */
+        .version-tag.actual {
+            color: #44ff44;
+            border-color: rgba(68, 255, 68, 0.4);
+            background: rgba(68, 255, 68, 0.08);
         }
 
-        .version-tag.old {
-            color: #88cc88;
-            border-color: rgba(136, 204, 136, 0.25);
-            background: rgba(136, 204, 136, 0.06);
+        /* === ИСТОРИЯ ОДНОГО ШТУРМА — КРАСНАЯ === */
+        .version-tag.ios {
+            color: #ff4444;
+            border-color: rgba(255, 68, 68, 0.4);
+            background: rgba(255, 68, 68, 0.08);
         }
 
         .version-name {
@@ -105,7 +107,7 @@
             color: #ff0000;
         }
 
-        /* === СЧЁТЧИК СКАЧИВАНИЙ — БЕЛЫЙ === */
+        /* === СЧЁТЧИК — БЕЛЫЙ === */
         .download-counter {
             font-size: 0.8rem;
             color: #ffffff;
@@ -209,11 +211,11 @@
 
     <div class="archive-container" id="archiveContainer">
 
-        <!-- CLOSE BETA — История одного штурма -->
+        <!-- CLOSE BETA — История одного штурма (КРАСНАЯ плашка) -->
         <div class="version-card">
             <div class="version-info">
                 <div class="version-top">
-                    <span class="version-tag old">История одного штурма</span>
+                    <span class="version-tag ios">История одного штурма</span>
                     <span class="version-name">0.0.0.3 <span class="highlight">close</span> beta</span>
                 </div>
                 <div class="download-counter">
@@ -242,7 +244,7 @@
         const OLD_REPO = 'qmenrust-sketch/storyOne_assult';
         const autoContainer = document.getElementById('autoReleases');
 
-        // === Счётчик скачиваний для close beta ===
+        // === Счётчик для close beta ===
         async function loadCloseBetaCount() {
             try {
                 const response = await fetch(`https://api.github.com/repos/${OLD_REPO}/releases`);
@@ -262,7 +264,7 @@
             }
         }
 
-        // === Основная загрузка релизов TRIADA ===
+        // === Основная загрузка релизов ===
         async function loadAllReleases() {
             try {
                 const response = await fetch(`https://api.github.com/repos/${REPO}/releases`);
@@ -287,16 +289,19 @@
                         year: 'numeric'
                     });
 
-                    const isNew = index === 0;
-                    const title = release.name || release.tag_name;
+                    // === ПЕРВЫЙ — АКТУАЛЬНАЯ (ЗЕЛЁНАЯ), ОСТАЛЬНЫЕ — БЕЗ ПЛАШКИ ===
+                    const isFirst = index === 0;
+                    const tagHtml = isFirst
+                        ? '<span class="version-tag actual">Актуальная</span>'
+                        : '';
 
                     const card = document.createElement('div');
                     card.className = 'version-card';
                     card.innerHTML = `
                         <div class="version-info">
                             <div class="version-top">
-                                <span class="version-tag ${isNew ? 'new' : ''}">${isNew ? 'Новая' : 'Стабильная'}</span>
-                                <span class="version-name">${title}</span>
+                                ${tagHtml}
+                                <span class="version-name">${release.name || release.tag_name}</span>
                             </div>
                             <div class="download-counter">
                                 <span class="icon">⬇</span>
