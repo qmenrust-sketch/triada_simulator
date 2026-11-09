@@ -87,7 +87,6 @@
             color: #ff0000;
         }
 
-        /* === СКРИНШОТЫ === */
         .screenshots {
             display: flex;
             flex-direction: column;
@@ -193,7 +192,6 @@
             letter-spacing: 1px;
         }
 
-        /* === СТАТУС — БЕЛЫЙ === */
         .download-btn .btn-status {
             font-family: 'Courier New', 'Lucida Console', monospace;
             font-size: 0.8rem;
@@ -214,6 +212,50 @@
             border-color: rgba(255, 255, 255, 0.4);
             background: rgba(255, 255, 255, 0.03);
             box-shadow: none;
+        }
+
+        /* === БЛОК "ЧТО НОВОГО" === */
+        .changelog-box {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            animation-delay: 1s;
+            display: none;
+        }
+
+        .changelog-box.visible {
+            display: block;
+        }
+
+        .changelog-box .changelog-title {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1rem;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .changelog-box .changelog-title .highlight {
+            color: #ff0000;
+        }
+
+        .changelog-box .changelog-content {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 0.9rem;
+            color: #bbbbbb;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         /* === ПРАВАЯ ЧАСТЬ === */
@@ -432,6 +474,8 @@
             .social-dropdown a { font-size: 0.8rem; }
             .footer .disclaimer { font-size: 0.7rem; }
             .footer .copyright { font-size: 0.7rem; }
+            .changelog-box { padding: 14px 16px; }
+            .changelog-box .changelog-content { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -474,6 +518,12 @@
                     <span class="btn-label">Android</span>
                     <span class="btn-status">в разработке...</span>
                 </div>
+            </div>
+
+            <!-- БЛОК "ЧТО НОВОГО" -->
+            <div class="changelog-box" id="changelogBox">
+                <div class="changelog-title">Что <span class="highlight">нового</span></div>
+                <div class="changelog-content" id="changelogContent"></div>
             </div>
         </div>
 
@@ -526,16 +576,19 @@
 
                 const btn = document.getElementById('windowsDownload');
                 const versionLabel = document.getElementById('latestVersion');
+                const changelogBox = document.getElementById('changelogBox');
+                const changelogContent = document.getElementById('changelogContent');
 
                 if (asset) btn.href = asset.browser_download_url;
                 if (versionLabel) versionLabel.textContent = latest.tag_name;
-            } catch (e) {
-                console.error('Не удалось загрузить релизы:', e);
-            }
-        }
 
-        loadLatestRelease();
-    </script>
-
-</body>
-</html>
+                // === ВЫВОД ОПИСАНИЯ РЕЛИЗА ===
+                if (latest.body && latest.body.trim()) {
+                    let description = latest.body.trim();
+                    
+                    // Простая замена маркдауна на HTML
+                    description = description
+                        .replace(/^### (.*)$/gm, '<strong>$1</strong>')
+                        .replace(/^## (.*)$/gm, '<strong style="font-size:1.1em;">$1</strong>')
+                        .replace(/^# (.*)$/gm, '<strong style="font-size:1.2em;">$1</strong>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</str
