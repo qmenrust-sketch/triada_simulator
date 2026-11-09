@@ -33,6 +33,7 @@
             flex: 1;
         }
 
+        /* === ЛЕВАЯ ЧАСТЬ === */
         .left-content {
             display: flex;
             flex-direction: column;
@@ -46,6 +47,7 @@
             display: flex;
             align-items: flex-start;
             gap: 30px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -87,6 +89,7 @@
             color: #ff0000;
         }
 
+        /* === СКРИНШОТЫ === */
         .screenshots {
             display: flex;
             flex-direction: column;
@@ -100,7 +103,7 @@
 
         .screenshots img {
             width: 100%;
-            max-width: 450px;
+            max-width: 380px;
             height: auto;
             display: block;
             border: 2px solid rgba(255, 255, 255, 0.15);
@@ -127,6 +130,7 @@
             opacity: 0;
             animation: slideInLogo 1.2s ease-out forwards;
             animation-delay: 0.6s;
+            min-width: 250px;
         }
 
         .download-title {
@@ -135,6 +139,7 @@
             color: #ffffff;
             letter-spacing: 3px;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            text-align: center;
         }
 
         .download-buttons {
@@ -212,50 +217,6 @@
             border-color: rgba(255, 255, 255, 0.4);
             background: rgba(255, 255, 255, 0.03);
             box-shadow: none;
-        }
-
-        /* === БЛОК "ЧТО НОВОГО" === */
-        .changelog-box {
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
-            padding: 20px 24px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out forwards;
-            animation-delay: 1s;
-            display: none;
-        }
-
-        .changelog-box.visible {
-            display: block;
-        }
-
-        .changelog-box .changelog-title {
-            font-family: 'Courier New', 'Lucida Console', monospace;
-            font-size: 1rem;
-            color: #ffffff;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
-        }
-
-        .changelog-box .changelog-title .highlight {
-            color: #ff0000;
-        }
-
-        .changelog-box .changelog-content {
-            font-family: 'Courier New', 'Lucida Console', monospace;
-            font-size: 0.9rem;
-            color: #bbbbbb;
-            line-height: 1.6;
-            letter-spacing: 0.3px;
-            white-space: pre-wrap;
-            word-break: break-word;
         }
 
         /* === ПРАВАЯ ЧАСТЬ === */
@@ -372,6 +333,61 @@
             color: #ffe066;
         }
 
+        /* =======================================
+           БЛОК "ЧТО НОВОГО" (ТЕПЕРЬ ВНИЗУ)
+           ======================================= */
+        .bottom-news-section {
+            width: 100%;
+            max-width: 1400px; /* Как и основной контент */
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        .changelog-box {
+            width: 100%;
+            max-width: 800px; /* Широкая плашка */
+            padding: 25px 35px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: none; /* Скрыто по умолчанию */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .changelog-box.visible {
+            display: block;
+        }
+
+        .changelog-box .changelog-title {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1.2rem;
+            color: #ffffff;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .changelog-box .changelog-title .highlight {
+            color: #ff0000;
+        }
+
+        .changelog-box .changelog-content {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            font-size: 1rem;
+            color: #cccccc;
+            line-height: 1.7;
+            letter-spacing: 0.5px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
         /* === ФУТЕР === */
         .footer {
             width: 100%;
@@ -416,6 +432,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
+        /* === АДАПТАЦИЯ === */
         @media (max-width: 1200px) {
             .center-content { height: auto; padding: 20px 0; justify-content: center; }
             .download-btn .btn-icon { width: 110px; height: 110px; }
@@ -423,7 +440,7 @@
             .right-content .text-btn, .social-toggle { font-size: 1rem; }
             .left-content { max-width: 350px; }
             .text-block .line { font-size: 2.2rem; }
-            .screenshots img { max-width: 350px; }
+            .screenshots img { max-width: 300px; }
         }
 
         @media (max-width: 1024px) {
@@ -433,25 +450,25 @@
             .left-content { max-width: 300px; }
             .text-block .line { font-size: 1.8rem; }
             .logo img { max-height: 140px; }
-            .screenshots img { max-width: 300px; }
+            .screenshots img { max-width: 260px; }
         }
 
         @media (max-width: 850px) {
             body { padding: 20px; }
-            .main-content { flex-direction: column; align-items: flex-start; gap: 30px; }
-            .left-content { max-width: 100%; width: 100%; }
-            .left-header { flex-wrap: wrap; gap: 15px; }
-            .screenshots img { max-width: 100%; }
+            .main-content { flex-direction: column; align-items: center; gap: 30px; }
+            .left-content { max-width: 100%; width: 100%; align-items: center; text-align: center; }
+            .left-header { justify-content: center; }
+            .screenshots { align-items: center; }
             .right-content {
                 flex: 1 1 auto; max-width: 100%; width: 100%; height: auto; min-height: auto;
-                flex-direction: row; flex-wrap: wrap; justify-content: flex-start;
+                flex-direction: row; flex-wrap: wrap; justify-content: center;
                 padding: 0 0 10px 0; gap: 15px 25px; padding-left: 0;
             }
             .right-content::before { display: none; }
             .right-content .text-btn, .social-toggle {
                 font-size: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 0;
             }
-            .social-dropdown { width: 100%; flex-direction: row; flex-wrap: wrap; gap: 10px 20px; padding-left: 0; }
+            .social-dropdown { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px 20px; padding-left: 0; }
             .social-dropdown a { font-size: 0.85rem; }
             .social-dropdown .support-link { border-top: none; margin-top: 0; padding-top: 4px; }
             .center-content { width: 100%; height: auto; min-height: 200px; padding: 10px 0; justify-content: center; }
@@ -459,7 +476,13 @@
             .logo img { max-height: 120px; }
             .download-btn .btn-icon { width: 80px; height: 80px; }
             .download-title { font-size: 1.2rem; }
-            .footer { margin-top: 20px; padding-top: 20px; }
+            .footer { margin-top: 30px; padding-top: 20px; }
+            
+            /* Адаптация новостей на телефоне */
+            .bottom-news-section { margin-top: 20px; padding: 0 10px; }
+            .changelog-box { padding: 20px; }
+            .changelog-box .changelog-title { font-size: 1.1rem; }
+            .changelog-box .changelog-content { font-size: 0.85rem; }
         }
 
         @media (max-width: 500px) {
@@ -474,15 +497,13 @@
             .social-dropdown a { font-size: 0.8rem; }
             .footer .disclaimer { font-size: 0.7rem; }
             .footer .copyright { font-size: 0.7rem; }
-            .changelog-box { padding: 14px 16px; }
-            .changelog-box .changelog-content { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ОСНОВНОЙ КОНТЕНТ (лого, кнопки, меню) -->
     <div class="main-content">
-
         <div class="left-content">
             <div class="left-header">
                 <div class="logo">
@@ -519,12 +540,6 @@
                     <span class="btn-status">в разработке...</span>
                 </div>
             </div>
-
-            <!-- БЛОК "ЧТО НОВОГО" -->
-            <div class="changelog-box" id="changelogBox">
-                <div class="changelog-title">Что <span class="highlight">нового</span></div>
-                <div class="changelog-content" id="changelogContent"></div>
-            </div>
         </div>
 
         <div class="right-content">
@@ -541,9 +556,17 @@
                 </div>
             </div>
         </div>
-
     </div>
 
+    <!-- БЛОК "ЧТО НОВОГО" (ТЕПЕРЬ ВНИЗУ НАД ФУТЕРОМ) -->
+    <div class="bottom-news-section">
+        <div class="changelog-box" id="changelogBox">
+            <div class="changelog-title">Что <span class="highlight">нового</span></div>
+            <div class="changelog-content" id="changelogContent"></div>
+        </div>
+    </div>
+
+    <!-- ФУТЕР -->
     <div class="footer">
         <div class="disclaimer">
             Все события, персонажи и так далее являются вымышленными, любые совпадения случайны.<br>
@@ -553,6 +576,7 @@
     </div>
 
     <script>
+        // === РАСКРЫТИЕ СОЦ СЕТЕЙ ===
         const toggle = document.getElementById('socialToggle');
         const dropdown = document.getElementById('socialDropdown');
 
@@ -561,6 +585,7 @@
             toggle.textContent = isOpen ? 'Соц сети ▲' : 'Соц сети ▼';
         });
 
+        // === ЗАГРУЗКА РЕЛИЗА И НОВОСТЕЙ ===
         const REPO = 'qmenrust-sketch/triada_simulator';
 
         async function loadLatestRelease() {
@@ -572,23 +597,4 @@
                 const latest = releases[0];
                 const asset = latest.assets.find(a =>
                     a.name.endsWith('.exe') || a.name.endsWith('.zip')
-                );
-
-                const btn = document.getElementById('windowsDownload');
-                const versionLabel = document.getElementById('latestVersion');
-                const changelogBox = document.getElementById('changelogBox');
-                const changelogContent = document.getElementById('changelogContent');
-
-                if (asset) btn.href = asset.browser_download_url;
-                if (versionLabel) versionLabel.textContent = latest.tag_name;
-
-                // === ВЫВОД ОПИСАНИЯ РЕЛИЗА ===
-                if (latest.body && latest.body.trim()) {
-                    let description = latest.body.trim();
-                    
-                    // Простая замена маркдауна на HTML
-                    description = description
-                        .replace(/^### (.*)$/gm, '<strong>$1</strong>')
-                        .replace(/^## (.*)$/gm, '<strong style="font-size:1.1em;">$1</strong>')
-                        .replace(/^# (.*)$/gm, '<strong style="font-size:1.2em;">$1</strong>')
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</str
+              
