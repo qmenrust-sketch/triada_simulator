@@ -333,61 +333,6 @@
             color: #ffe066;
         }
 
-        /* =======================================
-           БЛОК "ЧТО НОВОГО" (ТЕПЕРЬ ВНИЗУ)
-           ======================================= */
-        .bottom-news-section {
-            width: 100%;
-            max-width: 1400px; /* Как и основной контент */
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out forwards;
-            animation-delay: 1.5s;
-        }
-
-        .changelog-box {
-            width: 100%;
-            max-width: 800px; /* Широкая плашка */
-            padding: 25px 35px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            display: none; /* Скрыто по умолчанию */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .changelog-box.visible {
-            display: block;
-        }
-
-        .changelog-box .changelog-title {
-            font-family: 'Courier New', 'Lucida Console', monospace;
-            font-size: 1.2rem;
-            color: #ffffff;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-            text-align: center;
-        }
-
-        .changelog-box .changelog-title .highlight {
-            color: #ff0000;
-        }
-
-        .changelog-box .changelog-content {
-            font-family: 'Courier New', 'Lucida Console', monospace;
-            font-size: 1rem;
-            color: #cccccc;
-            line-height: 1.7;
-            letter-spacing: 0.5px;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
         /* === ФУТЕР === */
         .footer {
             width: 100%;
@@ -477,12 +422,6 @@
             .download-btn .btn-icon { width: 80px; height: 80px; }
             .download-title { font-size: 1.2rem; }
             .footer { margin-top: 30px; padding-top: 20px; }
-            
-            /* Адаптация новостей на телефоне */
-            .bottom-news-section { margin-top: 20px; padding: 0 10px; }
-            .changelog-box { padding: 20px; }
-            .changelog-box .changelog-title { font-size: 1.1rem; }
-            .changelog-box .changelog-content { font-size: 0.85rem; }
         }
 
         @media (max-width: 500px) {
@@ -502,8 +441,9 @@
 </head>
 <body>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ (лого, кнопки, меню) -->
     <div class="main-content">
+
+        <!-- ЛЕВАЯ ЧАСТЬ -->
         <div class="left-content">
             <div class="left-header">
                 <div class="logo">
@@ -522,6 +462,7 @@
             </div>
         </div>
 
+        <!-- ЦЕНТР -->
         <div class="center-content">
             <div class="download-title">Доступно для скачивания</div>
             <div class="download-buttons">
@@ -542,6 +483,7 @@
             </div>
         </div>
 
+        <!-- ПРАВАЯ ЧАСТЬ -->
         <div class="right-content">
             <a href="file_archive.html" class="text-btn">Архив версий</a>
             <span class="text-btn" style="cursor: default; pointer-events: none; color: #555555;">Wiki</span>
@@ -556,14 +498,7 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- БЛОК "ЧТО НОВОГО" (ТЕПЕРЬ ВНИЗУ НАД ФУТЕРОМ) -->
-    <div class="bottom-news-section">
-        <div class="changelog-box" id="changelogBox">
-            <div class="changelog-title">Что <span class="highlight">нового</span></div>
-            <div class="changelog-content" id="changelogContent"></div>
-        </div>
     </div>
 
     <!-- ФУТЕР -->
@@ -576,7 +511,7 @@
     </div>
 
     <script>
-        // === РАСКРЫТИЕ СОЦ СЕТЕЙ ===
+        // === РАСКРЫТИЕ СПИСКА СОЦ СЕТЕЙ ===
         const toggle = document.getElementById('socialToggle');
         const dropdown = document.getElementById('socialDropdown');
 
@@ -585,7 +520,7 @@
             toggle.textContent = isOpen ? 'Соц сети ▲' : 'Соц сети ▼';
         });
 
-        // === ЗАГРУЗКА РЕЛИЗА И НОВОСТЕЙ ===
+        // === АВТОЗАГРУЗКА ПОСЛЕДНЕГО РЕЛИЗА ===
         const REPO = 'qmenrust-sketch/triada_simulator';
 
         async function loadLatestRelease() {
@@ -597,4 +532,20 @@
                 const latest = releases[0];
                 const asset = latest.assets.find(a =>
                     a.name.endsWith('.exe') || a.name.endsWith('.zip')
-              
+                );
+
+                const btn = document.getElementById('windowsDownload');
+                const versionLabel = document.getElementById('latestVersion');
+
+                if (asset) btn.href = asset.browser_download_url;
+                if (versionLabel) versionLabel.textContent = latest.tag_name;
+            } catch (e) {
+                console.error('Не удалось загрузить релизы:', e);
+            }
+        }
+
+        loadLatestRelease();
+    </script>
+
+</body>
+</html>
