@@ -45,8 +45,8 @@
 
         .left-header {
             display: flex;
-            align-items: flex-start;
-            gap: 30px;
+            align-items: flex-start; /* Выравниваем по верхнему краю */
+            gap: 20px;
             flex-wrap: wrap;
         }
 
@@ -58,15 +58,16 @@
         }
 
         .logo img {
-            max-height: 180px;
+            max-height: 140px; /* Чуть уменьшил, чтобы название смотрелось гармоничнее */
             width: auto;
             display: block;
         }
 
+        /* === НАЗВАНИЕ === */
         .text-block {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 2px; /* Плотнее строки */
             opacity: 0;
             transform: translateX(-100px);
             animation: slideInText 1s ease-out forwards;
@@ -76,13 +77,13 @@
 
         .text-block .line {
             font-family: 'Courier New', 'Lucida Console', monospace;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
             letter-spacing: 3px;
             white-space: nowrap;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
         .text-block .line .highlight {
@@ -384,7 +385,7 @@
             .right-content { flex: 0 0 160px; max-width: 160px; padding-left: 20px; }
             .right-content .text-btn, .social-toggle { font-size: 1rem; }
             .left-content { max-width: 350px; }
-            .text-block .line { font-size: 2.2rem; }
+            .text-block .line { font-size: 2rem; }
             .screenshots img { max-width: 300px; }
         }
 
@@ -393,17 +394,20 @@
             .download-btn .btn-icon { width: 90px; height: 90px; }
             .download-buttons { gap: 30px; }
             .left-content { max-width: 300px; }
-            .text-block .line { font-size: 1.8rem; }
-            .logo img { max-height: 140px; }
+            .text-block .line { font-size: 1.6rem; }
+            .logo img { max-height: 110px; }
             .screenshots img { max-width: 260px; }
         }
 
         @media (max-width: 850px) {
             body { padding: 20px; }
             .main-content { flex-direction: column; align-items: center; gap: 30px; }
+            
+            /* Центрируем лого и название на телефоне */
             .left-content { max-width: 100%; width: 100%; align-items: center; text-align: center; }
             .left-header { justify-content: center; }
             .screenshots { align-items: center; }
+            
             .right-content {
                 flex: 1 1 auto; max-width: 100%; width: 100%; height: auto; min-height: auto;
                 flex-direction: row; flex-wrap: wrap; justify-content: center;
@@ -416,16 +420,18 @@
             .social-dropdown { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px 20px; padding-left: 0; }
             .social-dropdown a { font-size: 0.85rem; }
             .social-dropdown .support-link { border-top: none; margin-top: 0; padding-top: 4px; }
+            
             .center-content { width: 100%; height: auto; min-height: 200px; padding: 10px 0; justify-content: center; }
-            .text-block .line { font-size: 2rem; }
-            .logo img { max-height: 120px; }
+            .text-block .line { font-size: 2rem; white-space: normal; }
+            .logo img { max-height: 100px; }
             .download-btn .btn-icon { width: 80px; height: 80px; }
             .download-title { font-size: 1.2rem; }
             .footer { margin-top: 30px; padding-top: 20px; }
         }
 
         @media (max-width: 500px) {
-            .text-block .line { font-size: 1.5rem; }
+            .left-header { flex-direction: column; align-items: center; gap: 15px; }
+            .text-block .line { font-size: 1.5rem; letter-spacing: 1px; }
             .logo img { max-height: 80px; }
             .download-btn .btn-icon { width: 70px; height: 70px; border-radius: 12px; }
             .download-btn .btn-icon img { padding: 8px; }
@@ -446,15 +452,18 @@
         <!-- ЛЕВАЯ ЧАСТЬ -->
         <div class="left-content">
             <div class="left-header">
+                <!-- ЛОГОТИП -->
                 <div class="logo">
                     <img src="logo_web.jpg" alt="Логотип">
                 </div>
+                <!-- НАЗВАНИЕ -->
                 <div class="text-block">
                     <span class="line">TRIADA</span>
                     <span class="line"><span class="highlight">SIMULATOR</span></span>
                 </div>
             </div>
 
+            <!-- СКРИНШОТЫ -->
             <div class="screenshots">
                 <img src="1.jpg" alt="Скриншот 1">
                 <img src="2.jpg" alt="Скриншот 2">
@@ -462,7 +471,7 @@
             </div>
         </div>
 
-        <!-- ЦЕНТР -->
+        <!-- ЦЕНТР (КНОПКИ) -->
         <div class="center-content">
             <div class="download-title">Доступно для скачивания</div>
             <div class="download-buttons">
